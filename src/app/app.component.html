@@ -1,0 +1,19 @@
+<nav class="menu">
+  <button
+    (click)="vista = 'pasajero'"
+    [class.activo]="vista === 'pasajero'"
+  >
+    Pasajero
+  </button>
+
+  <button
+    (click)="vista = 'ejecutivo'"
+    [class.activo]="vista === 'ejecutivo'"
+  >
+    Ejecutivo
+  </button>
+</nav>
+
+<app-pasajero *ngIf="vista === 'pasajero'"></app-pasajero>
+
+<app-ejecutivo *ngIf="vista === 'ejecutivo'"></app-ejecutivo>

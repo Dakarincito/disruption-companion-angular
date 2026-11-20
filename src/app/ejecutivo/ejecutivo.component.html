@@ -1,0 +1,74 @@
+<section class="contenedor">
+  <h1>Evaluación de la reserva</h1>
+  <p>Información para el ejecutivo.</p>
+
+  <form (ngSubmit)="consultar()">
+    <label for="reserva-ejecutivo">Código de reserva</label>
+
+    <div class="buscador">
+      <input
+        id="reserva-ejecutivo"
+        name="reserva"
+        [(ngModel)]="bookingId"
+        placeholder="Ejemplo: ABC123"
+        required
+      />
+
+      <button type="submit" [disabled]="cargando">
+        {{ cargando ? 'Consultando...' : 'Consultar' }}
+      </button>
+    </div>
+  </form>
+
+  <p *ngIf="error" class="error" role="alert">{{ error }}</p>
+
+  <article *ngIf="resultado as evaluacion" class="tarjeta">
+    <small>Reserva {{ evaluacion.bookingId }}</small>
+
+    <h2>
+      {{
+        evaluacion.decision === 'REQUIRES_HUMAN'
+          ? 'Requiere revisión de un agente'
+          : evaluacion.decision
+      }}
+    </h2>
+
+    <div *ngIf="evaluacion.disruption as incidencia">
+      <h3>Incidencia</h3>
+      <p>
+        {{
+          incidencia.type === 'MISSED_CONNECTION'
+            ? 'Conexión perdida'
+            : incidencia.type
+        }}
+      </p>
+      <p><strong>Retraso:</strong> {{ incidencia.delayMinutes }} minutos</p>
+    </div>
+
+    <div class="siguiente">
+      <h3>Alternativa propuesta — sin confirmar</h3>
+
+      <ng-container
+        *ngIf="evaluacion.candidateOption as opcion; else sinOpcion"
+      >
+        <p><strong>Vuelo:</strong> {{ opcion.flightNumber }}</p>
+        <p><strong>Fecha:</strong> {{ opcion.date }}</p>
+        <p><strong>Salida:</strong> {{ opcion.departure }}</p>
+        <p><strong>Confianza:</strong> {{ opcion.confidence }}</p>
+      </ng-container>
+
+      <ng-template #sinOpcion>
+        <p>No hay una alternativa propuesta.</p>
+      </ng-template>
+    </div>
+
+    <div *ngIf="evaluacion.reviewReasons.length">
+      <h3>Motivos de revisión</h3>
+      <ul>
+        <li *ngFor="let motivo of evaluacion.reviewReasons">
+          <strong>{{ motivo.code }}</strong>: {{ motivo.detail }}
+        </li>
+      </ul>
+    </div>
+  </article>
+</section>

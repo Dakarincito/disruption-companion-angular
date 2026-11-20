@@ -1,0 +1,20 @@
+.menu {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  padding-top: 24px;
+}
+
+.menu button {
+  padding: 12px 24px;
+  border: 1px solid #176b57;
+  border-radius: 8px;
+  background: white;
+  color: #176b57;
+  cursor: pointer;
+}
+
+.menu button.activo {
+  background: #176b57;
+  color: white;
+}

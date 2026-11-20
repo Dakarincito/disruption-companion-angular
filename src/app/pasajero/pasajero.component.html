@@ -1,0 +1,51 @@
+<section class="contenedor">
+  <h1>Consulta tu viaje</h1>
+  <p>Ingresa tu reserva para conocer su estado.</p>
+
+  <form (ngSubmit)="consultar()">
+    <label for="reserva">Código de reserva</label>
+
+    <div class="buscador">
+      <input
+        id="reserva"
+        name="reserva"
+        [(ngModel)]="bookingId"
+        placeholder="Ejemplo: ABC123"
+        required
+      />
+
+      <button type="submit" [disabled]="cargando">
+        {{ cargando ? 'Consultando...' : 'Consultar' }}
+      </button>
+    </div>
+  </form>
+
+  <p *ngIf="error" class="error" role="alert">{{ error }}</p>
+
+  <article *ngIf="resultado as viaje" class="tarjeta">
+    <small>Reserva {{ viaje.bookingId }}</small>
+
+    <h2>{{ viaje.title }}</h2>
+    <p>{{ viaje.message }}</p>
+
+<ul>
+  <li
+    *ngFor="let detalle of viaje.details"
+    [class.aviso-importante]="detalle.startsWith('⚠️')"
+  >
+    {{ detalle }}
+  </li>
+</ul>
+
+    <div class="siguiente">
+      <strong>Próximo paso</strong>
+      <p>
+        {{
+          viaje.nextStep === 'AWAIT_AGENT'
+            ? 'Espera la revisión de un agente.'
+            : viaje.nextStep
+        }}
+      </p>
+    </div>
+  </article>
+</section>
